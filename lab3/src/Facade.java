@@ -1,0 +1,3 @@
+public enum Facade {
+    BEAUTIFUL;
+}
