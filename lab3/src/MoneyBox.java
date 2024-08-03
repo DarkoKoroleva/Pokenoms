@@ -17,6 +17,75 @@ public class MoneyBox {
         this.weight = era5.weight*era5.count + era10.weight*era10.count + era25.weight*era25.count;;
     }
 
+    public MoneyBox(int count, Facade status1, Weight status2) {
+        class GenerateCoins {
+            public void generation(int count){
+                Random r = new Random();
+                for (int j = 0; j < count; j++) {
+                    int i = r.nextInt(3);
+                    switch (i) {
+                        case 0:
+                            era5.count += 1;
+                            weight += era5.weight;
+                            break;
+                        case 1:
+                            era10.count += 1;
+                            weight += era10.weight;
+                            break;
+                        case 2:
+                            era25.count += 1;
+                            weight += era25.weight;
+                            break;
+                        default:
+                            NoSuchIndexException e = new NoSuchIndexException();
+                            System.out.println(e.getMessage());
+                    }
+                }
+            }
+        }
+
+        GenerateCoins generateCoins = new GenerateCoins();
+        generateCoins.generation(count);
+        this.facade = status1;
+        this.mass = status2;
+    }
+
+    public class Coin {
+        private int value;
+        protected int count;
+        protected final double weight;
+
+        Rolling rolling = new Rolling() {
+            @Override
+            public void roll() {
+                System.out.println("Rolling...");
+            }
+        };
+
+        public Coin(int value, int count, double weight) {
+            this.value = value;
+            this.count = count;
+            this.weight = weight;
+        }
+        public int getValue() {
+            return value;
+        }
+
+        public int getCount() {
+            return count;
+        }
+
+        public void setCount(int count) {
+            this.count = count;
+        }
+
+        public void setValue(int value) {
+            this.value = value;
+        }
+
+    }
+
+
     public Facade getFacade() {
         return facade;
     }

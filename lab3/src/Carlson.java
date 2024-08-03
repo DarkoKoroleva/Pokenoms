@@ -22,52 +22,57 @@ public class Carlson extends Character {
     }
 
 
-    public int takeCoin(MoneyBox pig){
-        if (!this.getHavingKnife()) return 0;
+    public int takeCoin(MoneyBox pig) throws NegativeWeightException {
+        int f = 0;
+        if (!this.getHavingKnife()) {
+            KnifeIsMissingException e = new KnifeIsMissingException();
+            System.out.println(e.getMessage());
+        }
 
-        Random r = new Random();
-        if ((pig.getWeight()) != 0){
+        if (pig.getMass() != Weight.LIGHTWEIGHT && pig.getWeight() < 10) {
+            pig.setMass(Weight.LIGHTWEIGHT);
+        }
+
+        while (f == 0) {
+            Random r = new Random();
             int i = r.nextInt(3);
-            switch (i){
+            switch (i) {
                 case 0:
-                    if (pig.era5.getCount() != 0) {
-                        pig.era5.setCount(pig.era5.getCount());
-                        pig.setWeight(pig.getWeight()-pig.era5.weight);
+                    if (pig.era5.getCount() > 0) {
+                        pig.era5.setCount(pig.era5.getCount() - 1);
+                        pig.setWeight(pig.getWeight() - pig.era5.weight);
                         System.out.println("A 5 era coin was obtained");
+                        f = 1;
+                        return 5;
                     }
                     break;
                 case 1:
-                    if (pig.era10.count != 0) {
+                    if (pig.era10.count > 0) {
                         pig.era10.count -= 1;
-                        pig.setWeight(pig.getWeight()-pig.era10.weight);
+                        pig.setWeight(pig.getWeight() - pig.era10.weight);
                         System.out.println("A 10 era coin was obtained");
+                        f = 1;
+                        return 10;
                     }
                     break;
                 case 2:
-                    if (pig.era25.count != 0) {
+                    if (pig.era25.count > 0) {
                         pig.era25.count -= 1;
-                        pig.setWeight(pig.getWeight()-pig.era25.weight);
+                        pig.setWeight(pig.getWeight() - pig.era25.weight);
                         System.out.println("A 25 era coin was obtained");
+                        f = 1;
+                        return 25;
                     }
                     break;
                 default:
-                    System.out.println("error");
-            }
-            if (pig.getMass() != Weight.LIGHTWEIGHT && pig.getWeight() <2) {
-                pig.setMass(Weight.LIGHTWEIGHT);
-            }
-            switch (i){
-                case 0:
-                    return 5;
-                case 1:
-                    return 10;
-                case 2:
-                    return 25;
-                default:
-                    System.out.println("error");
+                    NoSuchIndexException e = new NoSuchIndexException();
+                    System.out.println(e.getMessage());
             }
         }
-        else System.out.println ("The money box is empty");
+        if (pig.getWeight() < 0 ) {
+            NegativeWeightException e = new NegativeWeightException();
+            System.out.println(e.getMessage());
+        }
         return 0;
     }
 

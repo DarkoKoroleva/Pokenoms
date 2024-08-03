@@ -19,6 +19,6 @@ public abstract class Character {
     }
 
     public abstract void takeKnife(Knife knife);
-    public abstract int takeCoin(MoneyBox pig);
+    public abstract int takeCoin(MoneyBox pig) throws NegativeWeightException;
 
 }

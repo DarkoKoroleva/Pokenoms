@@ -12,9 +12,12 @@ public class Malysh extends Character {
         System.out.println("Malysh took knife");
     }
 
-    public int takeCoin(MoneyBox pig){
+    public int takeCoin(MoneyBox pig) throws NegativeWeightException {
         int f = 0;
-        if (!this.getHavingKnife()) return -1;
+        if (!this.getHavingKnife()) {
+           KnifeIsMissingException e = new KnifeIsMissingException();
+           System.out.println(e.getMessage());
+        }
 
         if (pig.getMass() != Weight.LIGHTWEIGHT && pig.getWeight() < 10) {
             pig.setMass(Weight.LIGHTWEIGHT);
@@ -53,9 +56,13 @@ public class Malysh extends Character {
                     }
                     break;
                 default:
-                    System.out.println("error " + i);
-                    break;
+                    NoSuchIndexException e = new NoSuchIndexException();
+                    System.out.println(e.getMessage());
             }
+        }
+        if (pig.getWeight() < 0 ) {
+            NegativeWeightException e = new NegativeWeightException();
+            System.out.println(e.getMessage());
         }
         return 0;
     }
