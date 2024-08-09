@@ -1,19 +1,63 @@
-public class House {
+public class House implements Comparable<House> {
     private String name; //Поле не может быть null
     private Long year; //Значение поля должно быть больше 0
     private Long numberOfFlatsOnFloor; //Значение поля должно быть больше 0
 
-    public House(String name, Long year, Long numberOfFlatsOnFloor){
-        if (name != null){
+    public House(String name, Long year, Long numberOfFlatsOnFloor) {
+        setName(name);
+        setYear(year);
+        setNumberOfFlatsOnFloor(numberOfFlatsOnFloor);
+    }
+
+    public void setName(String name) {
+        if (name != null) {
             this.name = name;
-        } else System.out.println("Name should not be null");
+        } else {
+            throw new WrongInputException("Enter house name");
+        }
+    }
 
-        if (year > 0){
+    public String getName() {
+        return name;
+    }
+
+    public void setYear(Long year) {
+        if (year > 0) {
             this.year = year;
-        } else System.out.println("Year should be > 0");
+        } else {
+            throw new WrongInputException("Year must be positive");
+        }
+    }
 
-        if (numberOfFlatsOnFloor > 0){
+    public Long getYear() {
+        return year;
+    }
+
+    public void setNumberOfFlatsOnFloor(Long numberOfFlatsOnFloor) {
+        if (numberOfFlatsOnFloor > 0) {
             this.numberOfFlatsOnFloor = numberOfFlatsOnFloor;
-        } else System.out.println("Number of flats on floor should be > 0");
+        } else {
+            throw new WrongInputException("Number of flats on floor must be positive");
+        }
+    }
+
+    public Long getNumberOfFlatsOnFloor() {
+        return numberOfFlatsOnFloor;
+    }
+
+    @Override
+    public int compareTo(House o) {
+        if (!name.equals(o.getName())) {
+            return name.compareTo(o.name);
+        } else if (!year.equals(o.year)) {
+            return (int) (year - o.year);
+        } else if (!numberOfFlatsOnFloor.equals(o.numberOfFlatsOnFloor)) {
+            return (int) (numberOfFlatsOnFloor - o.numberOfFlatsOnFloor);
+        } else return 0;
+    }
+
+    @Override
+    public String toString() {
+        return name + " " + year + " " + numberOfFlatsOnFloor;
     }
 }

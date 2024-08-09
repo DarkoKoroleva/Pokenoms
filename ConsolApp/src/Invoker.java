@@ -1,10 +1,22 @@
-public class Invoker {
-    private Command command;
+import java.util.HashMap;
+import java.util.Map;
 
-    public void setCommand(Command command) {
-        this.command = command;
+public class Invoker {
+    private Map<String, Command> commands = new HashMap<>();
+    Receiver receiver = new Receiver();
+
+    public Invoker() {}
+
+    public void setCommand(String key, Command command) {
+        commands.put(key, command);
     }
-    public void executeCommand(Command command){
-        command.execute();
+
+    public void executeCommand(String key) {
+        commands.get(key).execute();
     }
+
+    public void init() {
+        setCommand("add", new Add(receiver));
+    }
+
 }
