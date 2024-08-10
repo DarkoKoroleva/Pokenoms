@@ -48,8 +48,8 @@ public class Receiver {
             }
         }
 
-        if (id.equals(maxElement.getId())) {
-            Flat maxElement = collection.peekFirst();
+        if (maxElement != null && id.equals(maxElement.getId())) {
+            maxElement = collection.peekFirst();
             for (Flat flat : collection) {
                 if (flat.compareTo(maxElement) > 0) {
                     maxElement = flat;

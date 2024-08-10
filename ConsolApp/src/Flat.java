@@ -1,4 +1,5 @@
 import java.util.Date;
+import java.util.Random;
 
 public class Flat implements Comparable<Flat> {
     public static final int MIN_AREA = 0;
@@ -15,6 +16,8 @@ public class Flat implements Comparable<Flat> {
     private View view; //Поле не может быть null
     private House house; //Поле может быть null
 
+    public Flat(){}
+
     public Flat(String name, Coordinates coordinates, int area, Long numberOfRooms, double price, Boolean furniture, View view, House house) {
         setId();
         setName(name);
@@ -29,7 +32,8 @@ public class Flat implements Comparable<Flat> {
     }
 
     public void setId() {
-        id = 1L;
+        Random r = new Random();
+        id =  r.nextLong();
     }
 
     public Long getId() {
@@ -52,7 +56,7 @@ public class Flat implements Comparable<Flat> {
         if (coordinates != null) {
             this.coordinates = coordinates;
         } else {
-            throw new WrongInputException("Enter coordinates");
+            throw new WrongInputException("Coordinates consists of 2 numbers");
         }
     }
 

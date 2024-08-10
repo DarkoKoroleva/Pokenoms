@@ -11,12 +11,14 @@ public class Invoker {
         commands.put(key, command);
     }
 
-    public void executeCommand(String key) {
-        commands.get(key).execute();
+    public void executeCommand(String key, String args) {
+        commands.get(key).execute(args);
     }
 
     public void init() {
         setCommand("add", new Add(receiver));
+        setCommand("removeById", new RemoveById(receiver));
+        setCommand("info", new Info(receiver));
     }
 
 }

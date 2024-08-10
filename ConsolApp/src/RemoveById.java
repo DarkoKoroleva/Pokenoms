@@ -1,12 +1,13 @@
 public class RemoveById extends Command{
-    Long id;
-
-    public  RemoveById(Receiver receiver, Long id){
+    public  RemoveById(Receiver receiver){
         super(receiver);
-        this.id = id;
     }
 
-    public void execute(){
-        receiver.removeById(id);
+    public void execute(String arg){
+        try{
+            receiver.removeById(Long.valueOf(arg));
+        } catch (WrongInputException e){
+            Printer.println("Command remove by id accepts a number as input");
+        }
     }
 }

@@ -5,7 +5,12 @@ public class Info extends Command{
     }
 
     @Override
-    public void execute() {
-        receiver.info();
+    public void execute(String args) {
+        if (args == null) {
+            receiver.info();
+        } else {
+            WrongInputException e = new WrongInputException("Command Show have no arguments");
+            Printer.println(e.getMessage());
+        }
     }
 }

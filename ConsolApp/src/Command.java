@@ -5,5 +5,5 @@ public abstract class Command {
         this.receiver=receiver;
     }
 
-    public abstract void execute();
+    public abstract void execute(String args);
 }
