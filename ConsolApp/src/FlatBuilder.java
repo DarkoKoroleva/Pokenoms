@@ -6,26 +6,7 @@ public class FlatBuilder {
     public static final int MAX_AREA = 858;
 
     public static Flat build() {
-
-        String name = "default";
-        Coordinates coordinates = new Coordinates(0d, 0f);
-        int area = 1; //Максимальное значение поля: 858, Значение поля должно быть больше 0
-        Long numberOfRooms = 1L; //Значение поля должно быть больше 0
-        double price = 1; //Значение поля должно быть больше 0
-        Boolean furniture = null; //Поле может быть null
-        View view = View.PARK; //Поле не может быть null
-        House house = null; //Поле может быть null
-
-        name = readName();
-        coordinates = readCoordinates();
-        area = readArea();
-        numberOfRooms = readNumberOfRooms();
-        price = readPrice();
-        furniture = readFurniture();
-        view = readView();
-        house = readHouse();
-
-        return new Flat(name, coordinates, area, numberOfRooms, price, furniture, view, house);
+        return new Flat(readName(), readCoordinates(), readArea(), readNumberOfRooms(), readPrice(), readFurniture(), readView(), readHouse();
     }
 
 
