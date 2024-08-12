@@ -1,4 +1,4 @@
-import java.util.Date;
+import java.time.ZonedDateTime;
 import java.util.Random;
 
 public class Flat implements Comparable<Flat> {
@@ -16,8 +16,6 @@ public class Flat implements Comparable<Flat> {
     private View view; //Поле не может быть null
     private House house; //Поле может быть null
 
-    public Flat(){}
-
     public Flat(String name, Coordinates coordinates, int area, Long numberOfRooms, double price, Boolean furniture, View view, House house) {
         setId();
         setName(name);
@@ -33,7 +31,7 @@ public class Flat implements Comparable<Flat> {
 
     public void setId() {
         Random r = new Random();
-        id =  r.nextLong();
+        id = r.nextLong();
     }
 
     public Long getId() {
@@ -60,8 +58,16 @@ public class Flat implements Comparable<Flat> {
         }
     }
 
+    public Coordinates getCoordinates() {
+        return coordinates;
+    }
+
     public void setCreationDate() {
         this.creationDate = java.time.ZonedDateTime.now();
+    }
+
+    public ZonedDateTime getCreationDate() {
+        return creationDate;
     }
 
     public void setArea(int area) throws WrongInputException {
@@ -72,6 +78,10 @@ public class Flat implements Comparable<Flat> {
         }
     }
 
+    public int getArea() {
+        return area;
+    }
+
     public void setNumberOfRooms(Long numberOfRooms) throws WrongInputException {
         if (numberOfRooms > 0) {
             this.numberOfRooms = numberOfRooms;
@@ -80,12 +90,20 @@ public class Flat implements Comparable<Flat> {
         }
     }
 
+    public Long getNumberOfRooms() {
+        return numberOfRooms;
+    }
+
     public void setPrice(double price) throws WrongInputException {
         if (price > 0) {
             this.price = price;
         } else {
             throw new WrongInputException("Price should be positive");
         }
+    }
+
+    public double getPrice() {
+        return price;
     }
 
     public void setFurniture(Boolean furniture) {
@@ -104,6 +122,10 @@ public class Flat implements Comparable<Flat> {
         }
     }
 
+    public View getView() {
+        return view;
+    }
+
     public void setHouse(House house) {
         this.house = house;
     }
@@ -114,7 +136,34 @@ public class Flat implements Comparable<Flat> {
 
     @Override
     public int compareTo(Flat o) {
-        return (int) (this.id - o.id);
+        if (!name.equals(o.name)) {
+            return name.compareTo(o.name);
+        }
+        if (!coordinates.equals(o.coordinates)) {
+            return coordinates.compareTo(o.coordinates);
+        }
+        if (area != o.area) {
+            return Integer.compare(area, o.area);
+        }
+        if (!numberOfRooms.equals(o.numberOfRooms)){
+            return numberOfRooms.compareTo(o.numberOfRooms);
+        }
+        if (price != o.price){
+            return Double.compare(price, o.price);
+        }
+        if (!furniture.equals(o.furniture)){
+            return Boolean.compare(furniture, o.furniture);
+        }
+        if (!view.equals(o.view)){
+            return view.compareTo(o.view);
+        }
+        if (!house.equals(house)){
+            return house.compareTo(o.house);
+        }
+        if (!creationDate.equals(o.creationDate)) {
+            return creationDate.compareTo(o.creationDate);
+        }
+        return 0;
     }
 
     @Override

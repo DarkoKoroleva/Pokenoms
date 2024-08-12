@@ -1,4 +1,4 @@
-public class Coordinates {
+public class Coordinates implements Comparable<Coordinates> {
     public static final int MIN_Y = -114;
     public static final int MAX_X = 640;
     private Double x; //Максимальное значение поля: 640, Поле не может быть null
@@ -25,4 +25,24 @@ public class Coordinates {
         }
     }
 
+    @Override
+    public int compareTo(Coordinates o) {
+        if (!x.equals(o.x)) {
+            return x.compareTo(o.x);
+        } else {
+            return y.compareTo(o.y);
+        }
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        if (obj == null || obj.getClass() != this.getClass()) {
+            return false;
+        }
+        Coordinates c = (Coordinates) obj;
+        return this.compareTo(c) == 0;
+    }
 }

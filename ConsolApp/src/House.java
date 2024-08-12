@@ -60,4 +60,17 @@ public class House implements Comparable<House> {
     public String toString() {
         return name + " " + year + " " + numberOfFlatsOnFloor;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        if (obj == null || obj.getClass() != this.getClass()) {
+            return false;
+        }
+
+        House h = (House) obj;
+        return this.compareTo(h) == 0;
+    }
 }
