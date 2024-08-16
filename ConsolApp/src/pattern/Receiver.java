@@ -1,11 +1,13 @@
 package pattern;
 
+import commands.Command;
 import data.*;
 import tools.Response;
 
 import java.util.ArrayDeque;
 import java.util.Date;
 import java.util.Deque;
+import java.util.Map;
 
 public class Receiver {
     private Deque<Flat> collection = new ArrayDeque<>();
@@ -22,25 +24,12 @@ public class Receiver {
         return new Response("The element " + flat + " has been added");
     }
 
-    public Response help() {
-        return new Response("available operations:\n" +
-                "help : info about available operations\n" +
-                "info : information about collection\n" +
-                "show : see all the items in the collection\n" +
-                "add {element} : add new element to collection\n" +
-                "update_id {element} : update the value of a collection item whose ID is equal to the specified one\n" +
-                "remove_by_id id : remove an item from the collection by its id\n" +
-                "clear : clear the collection\n" +
-                "save : save the collection to a file\n" +
-                "execute_script file_name : Read and execute the script from the specified file. The script contains commands in the same form as they are entered by the user interactively.\n" +
-                "exit : end the program (without saving to a file)\n" +
-                "add_if_max {element} : add a new element to the collection if its value exceeds the value of the largest element of this collection\n" +
-                "remove_greater {element} : remove from the collection all elements exceeding the specified one\n" +
-                "remove_lower {element} : remove from the collection all elements smaller than the specified\n" +
-                "count_greater_than_house house : print the number of elements whose house field value is greater than the specified one\n" +
-                "filter_by_furniture furniture : output elements whose value of the furniture field is equal to the specified\n" +
-                "print_ascending : output the elements of the collection in ascending order"
-        );
+    public Response help(Invoker invoker) {
+        StringBuilder result = new StringBuilder("available operations:\n");
+        for (Map.Entry<String, Command> operation : invoker.getCommands().entrySet()){
+            result.append(operation.getValue().getDescription());
+        }
+        return new Response(result.toString());
     }
 
     public Response info() {
@@ -48,7 +37,7 @@ public class Receiver {
         result.append("Date: ").append(creationDate).append("\n");
         result.append("Size: ").append(collection.size()).append("\n");
         result.append("Max Element: ").append(maxElement);
-        return new Response(String.valueOf(result));
+        return new Response(result.toString());
     }
 
     public Response show() {
@@ -66,11 +55,11 @@ public class Receiver {
     }
 
     public Response removeById(Long id) {
-        Response result = new Response("Collection not contains element flat" + id);;
+        String result = "Collection not contains element flat with id = " + id;
         for (Flat flat : collection) {
             if (flat.getId().equals(id)) {
                 if (collection.remove(flat)) {
-                    result = new Response("Element was deleted successfully");
+                    result = "Element was deleted successfully";
                 }
                 break;
             }
@@ -85,25 +74,23 @@ public class Receiver {
             }
         }
 
-        return result;
+        return new Response(result);
     }
 
     public Response updateById (Long id){
-        Response result = new Response("Collection not contains element flat" + id);
+        String result = "Collection not contains element flat with id = " + id;
         for (Flat flat : collection) {
             if (flat.getId().equals(id)) {
                  FlatReader.flatUpdate(flat);
-                 result = new Response("flat " + id + " was updated");
+                 result = "flat " + id + " was updated";
             }
             break;
         }
-        return result;
+        return new Response(result);
     }
 
     public Response clear() {
-        while (!collection.isEmpty()) {
-            collection.remove();
-        }
+        collection.clear();
         return new Response("The collection has been cleared");
     }
 
@@ -117,9 +104,9 @@ public class Receiver {
 
     public Response removeGreater(Flat flat) {
         Response result = new Response("Collection not contains element greater than" + flat);
-        for (Flat iter : collection) {
-            if (iter.compareTo(flat) > 0) {
-                collection.remove(iter);
+        for (Flat flatsIter : collection) {
+            if (flatsIter.compareTo(flat) > 0) {
+                collection.remove(flatsIter);
                 result = new Response("Elements was deleted");
             }
         }
@@ -127,20 +114,24 @@ public class Receiver {
     }
 
     public Response removeLower(Flat flat) {
-        Response result = new Response("Collection not contains element lower than" + flat);
-        for (Flat iter : collection) {
-            if (iter.compareTo(flat) < 0) {
-                collection.remove(iter);
-                result = new Response("Elements was deleted");
+        StringBuilder deletingResult = new StringBuilder();
+        for (Flat flatsIter : collection) {
+            if (flatsIter.compareTo(flat) < 0) {
+                deletingResult.append(flatsIter.getId()).append(" ");
+                collection.remove(flatsIter);
             }
         }
-        return result;
+        if (!deletingResult.isEmpty()){
+            deletingResult.append("- flats with these id was deleted");
+            return new Response(deletingResult.toString());
+        }
+        return new Response("Collection not contains element lower than " + flat);
     }
 
     public Response countGreaterThanHouse(House house) {
         int counter = 0;
-        for (Flat iter : collection) {
-            if (iter.getHouse().compareTo(house) > 0) {
+        for (Flat flat : collection) {
+            if (flat.getHouse().compareTo(house) > 0) {
                 counter++;
             }
         }
