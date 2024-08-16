@@ -16,4 +16,8 @@ public class Show extends Command {
             throw new WrongInputException("Command Show have no arguments");
         }
     }
+
+    public String getTitle(){
+        return getClass().getName();
+    }
 }

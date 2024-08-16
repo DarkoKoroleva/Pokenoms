@@ -16,4 +16,9 @@ public class AddIfMax extends Command {
             throw new WrongInputException("Command AddIfMax does not accept arguments");
         }
     }
+
+    public String getTitle(){
+        return getClass().getName();
+    }
+
 }

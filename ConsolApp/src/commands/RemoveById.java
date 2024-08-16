@@ -14,4 +14,9 @@ public class RemoveById extends Command {
             return new Response(e.getMessage());
         }
     }
+
+    public String getTitle(){
+        return getClass().getName();
+    }
+
 }

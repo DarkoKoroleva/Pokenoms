@@ -16,4 +16,9 @@ public class Clear extends Command {
             throw new WrongInputException("Command Clear does not accept arguments");
         }
     }
+
+    public String getTitle(){
+        return getClass().getName();
+    }
+
 }

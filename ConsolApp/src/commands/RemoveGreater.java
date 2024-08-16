@@ -16,4 +16,9 @@ public class RemoveGreater extends Command {
             throw new WrongInputException("Command RemoveGreater does not accept arguments");
         }
     }
+
+    public String getTitle(){
+        return getClass().getName();
+    }
+
 }

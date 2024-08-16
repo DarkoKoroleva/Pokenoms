@@ -18,4 +18,8 @@ public class Add extends Command {
         }
     }
 
+    public String getTitle(){
+        return getClass().getName();
+    }
+
 }

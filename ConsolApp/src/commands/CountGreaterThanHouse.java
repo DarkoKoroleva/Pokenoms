@@ -18,4 +18,8 @@ public class CountGreaterThanHouse extends Command {
         }
     }
 
+    public String getTitle(){
+        return getClass().getName();
+    }
+
 }

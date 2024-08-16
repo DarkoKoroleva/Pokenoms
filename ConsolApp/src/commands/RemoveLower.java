@@ -16,4 +16,9 @@ public class RemoveLower extends Command {
             throw new WrongInputException("Command RemoveLower does not accept arguments");
         }
     }
+
+    public String getTitle(){
+        return getClass().getName();
+    }
+
 }

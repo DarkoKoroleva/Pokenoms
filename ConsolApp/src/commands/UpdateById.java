@@ -12,4 +12,9 @@ public class UpdateById extends Command {
         Long id = Long.valueOf(arg);
         return receiver.updateById(id);
     }
+
+    public String getTitle(){
+        return getClass().getName();
+    }
+
 }

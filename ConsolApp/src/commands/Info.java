@@ -16,4 +16,9 @@ public class Info extends Command {
             throw new WrongInputException("Command Info have no arguments");
         }
     }
+
+    public String getTitle(){
+        return getClass().getName();
+    }
+
 }

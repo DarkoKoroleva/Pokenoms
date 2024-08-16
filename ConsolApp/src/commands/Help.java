@@ -16,4 +16,8 @@ public class Help extends Command {
         }
     }
 
+    public String getTitle(){
+        return getClass().getName();
+    }
+
 }
