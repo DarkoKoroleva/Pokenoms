@@ -13,12 +13,16 @@ public class Info extends Command {
         if (args == null) {
             return receiver.info();
         } else {
-            throw new WrongInputException("Command Info have no arguments");
+            throw new WrongInputException("Command " + getTitle() + " have no arguments");
         }
     }
 
     public String getTitle(){
-        return getClass().getName();
+        return "info";
+    }
+
+    public String getDescription(){
+        return "info : information about collection\n";
     }
 
 }

@@ -13,12 +13,16 @@ public class RemoveGreater extends Command {
         if (arg == null) {
             return receiver.removeGreater(FlatReader.build());
         } else {
-            throw new WrongInputException("Command RemoveGreater does not accept arguments");
+            throw new WrongInputException("Command " + getTitle() + " does not accept arguments");
         }
     }
 
     public String getTitle(){
-        return getClass().getName();
+        return "remove_greater";
+    }
+
+    public String getDescription(){
+        return "remove_greater {element} : remove from the collection all elements exceeding the specified one\n";
     }
 
 }

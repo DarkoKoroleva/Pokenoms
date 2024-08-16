@@ -13,11 +13,15 @@ public class Show extends Command {
         if (arg == null) {
             return receiver.show();
         } else {
-            throw new WrongInputException("Command Show have no arguments");
+            throw new WrongInputException("Command " + getTitle() + " have no arguments");
         }
     }
 
     public String getTitle(){
-        return getClass().getName();
+        return "show";
+    }
+
+    public String getDescription(){
+        return "show : see all the items in the collection\n";
     }
 }

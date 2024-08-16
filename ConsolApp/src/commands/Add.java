@@ -14,12 +14,16 @@ public class Add extends Command {
         if (arg == null){
             return receiver.add(FlatReader.build());
         } else {
-            throw new WrongInputException("Command Add does not accept arguments");
+            throw new WrongInputException("Command " + getTitle() + " does not accept arguments");
         }
     }
 
     public String getTitle(){
-        return getClass().getName();
+        return "add";
+    }
+
+    public String getDescription(){
+        return "add {element} : add new element to collection\n";
     }
 
 }

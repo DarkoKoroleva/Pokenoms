@@ -14,7 +14,11 @@ public class UpdateById extends Command {
     }
 
     public String getTitle(){
-        return getClass().getName();
+        return "update_id";
+    }
+
+    public String getDescription(){
+        return "update_id {element} : update the value of a collection item whose ID is equal to the specified one\n";
     }
 
 }

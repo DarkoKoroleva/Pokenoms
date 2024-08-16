@@ -13,12 +13,16 @@ public class Clear extends Command {
         if (arg == null) {
             return receiver.clear();
         } else {
-            throw new WrongInputException("Command Clear does not accept arguments");
+            throw new WrongInputException("Command " + getTitle() + " does not accept arguments");
         }
     }
 
     public String getTitle(){
-        return getClass().getName();
+        return "clear";
+    }
+
+    public String getDescription(){
+        return "clear : clear the collection\n";
     }
 
 }

@@ -13,12 +13,15 @@ public class FilterByFurniture extends Command {
         if (arg != null) {
             return receiver.filterByFurniture(Boolean.valueOf(arg));
         } else {
-            throw new WrongInputException("Command filterByFurniture does not accept arguments");
+            throw new WrongInputException("Command " + getTitle() + " does not accept arguments");
         }
     }
 
     public String getTitle(){
-        return getClass().getName();
+        return "filter_by_furniture";
     }
 
+    public String getDescription(){
+        return "filter_by_furniture furniture : output elements whose value of the furniture field is equal to the specified\n";
+    }
 }

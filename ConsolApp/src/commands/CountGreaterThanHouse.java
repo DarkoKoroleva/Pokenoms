@@ -14,12 +14,16 @@ public class CountGreaterThanHouse extends Command {
         if (arg == null) {
             return receiver.countGreaterThanHouse(FlatReader.readHouse());
         } else {
-            throw new WrongInputException("Command countGreaterThanHouse does not accept arguments");
+            throw new WrongInputException("Command " + getTitle() + " does not accept arguments");
         }
     }
 
-    public String getTitle(){
-        return getClass().getName();
+    public String getTitle() {
+        return "count_greater_than_house house";
+    }
+
+    public String getDescription(){
+        return "count_greater_than_house house : print the number of elements whose house field value is greater than the specified one\n";
     }
 
 }

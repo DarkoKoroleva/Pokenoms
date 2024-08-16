@@ -13,12 +13,16 @@ public class RemoveLower extends Command {
         if (arg == null) {
             return receiver.removeLower(FlatReader.build());
         } else {
-            throw new WrongInputException("Command RemoveLower does not accept arguments");
+            throw new WrongInputException("Command " + getTitle() + " does not accept arguments");
         }
     }
 
     public String getTitle(){
-        return getClass().getName();
+        return "remove_lower";
+    }
+
+    public String getDescription(){
+        return "remove_lower {element} : remove from the collection all elements smaller than the specified\n";
     }
 
 }

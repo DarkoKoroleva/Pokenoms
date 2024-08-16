@@ -16,7 +16,11 @@ public class RemoveById extends Command {
     }
 
     public String getTitle(){
-        return getClass().getName();
+        return "remove_by_id";
+    }
+
+    public String getDescription(){
+        return "remove_by_id id : remove an item from the collection by its id\n";
     }
 
 }

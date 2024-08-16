@@ -11,4 +11,5 @@ public abstract class Command {
 
     public abstract Response execute(String arg);
 
+    public abstract String getDescription();
 }
