@@ -1,3 +1,6 @@
+import data.Flat;
+import data.House;
+
 import java.util.ArrayDeque;
 import java.util.Date;
 import java.util.Deque;
@@ -7,7 +10,8 @@ public class Receiver {
     private Date creationDate = new Date();
     private Flat maxElement;
 
-    public Receiver() {}
+    public Receiver() {
+    }
 
     public void add(Flat flat) {
         collection.addLast(flat);
@@ -17,6 +21,24 @@ public class Receiver {
     }
 
     public void help() {
+        Printer.print("available operations:" +
+                "help : info about available operations\n" +
+                "info : information about collection\n" +
+                "show : see all the items in the collection\n" +
+                "add {element} : add new element to collection\n" +
+                "updateId {element} : update the value of a collection item whose ID is equal to the specified one\n" +
+                "removeById id : remove an item from the collection by its id\n" +
+                "clear : clear the collection\n" +
+                "save : save the collection to a file\n" +
+                "execute_script file_name : Read and execute the script from the specified file. The script contains commands in the same form as they are entered by the user interactively.\n" +
+                "exit : end the program (without saving to a file)\n" +
+                "addIfMax {element} : add a new element to the collection if its value exceeds the value of the largest element of this collection\n" +
+                "removeGreater {element} : remove from the collection all elements exceeding the specified one\n" +
+                "removeLower {element} : remove from the collection all elements smaller than the specified\n" +
+                "countGreaterThanHouse house : print the number of elements whose house field value is greater than the specified one\n" +
+                "filterByFurniture furniture : output elements whose value of the furniture field is equal to the specified\n" +
+                "printAscending : output the elements of the collection in ascending order"
+        );
     }
 
     public void info() {
@@ -57,6 +79,14 @@ public class Receiver {
             }
         }
 
+    }
+
+    public void updateById (Long id){
+        for (Flat flat : collection) {
+            if (flat.getId().equals(id)) {
+                 flat = FlatBuilder.flatUpdate(flat);
+            }
+        }
     }
 
     public void clear() {

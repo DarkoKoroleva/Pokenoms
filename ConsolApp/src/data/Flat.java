@@ -74,7 +74,7 @@ public class Flat implements Comparable<Flat> {
         if (area <= MAX_AREA && area > MIN_AREA) {
             this.area = area;
         } else {
-            throw new WrongInputException("Area should be in diapason (0, 858]");
+            throw new WrongInputException("Area should be in diapason (" + MIN_AREA + ", " + MAX_AREA + "]");
         }
     }
 
@@ -145,19 +145,19 @@ public class Flat implements Comparable<Flat> {
         if (area != o.area) {
             return Integer.compare(area, o.area);
         }
-        if (!numberOfRooms.equals(o.numberOfRooms)){
+        if (!numberOfRooms.equals(o.numberOfRooms)) {
             return numberOfRooms.compareTo(o.numberOfRooms);
         }
-        if (price != o.price){
+        if (price != o.price) {
             return Double.compare(price, o.price);
         }
-        if (!furniture.equals(o.furniture)){
+        if (!furniture.equals(o.furniture)) {
             return Boolean.compare(furniture, o.furniture);
         }
-        if (!view.equals(o.view)){
+        if (!view.equals(o.view)) {
             return view.compareTo(o.view);
         }
-        if (!house.equals(house)){
+        if (!house.equals(house)) {
             return house.compareTo(o.house);
         }
         if (!creationDate.equals(o.creationDate)) {

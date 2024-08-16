@@ -5,6 +5,6 @@ public class Add extends Command {
     }
 
     public void execute(String args) {
-        receiver.add(FlatsBuilder.build());
+        receiver.add(FlatBuilder.build());
     }
 }
