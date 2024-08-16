@@ -2,18 +2,18 @@ package commands;
 import pattern.*;
 import tools.*;
 
-public class Show extends Command {
+public class Clear extends Command {
 
-    public Show(Receiver receiver) {
+    public Clear(Receiver receiver) {
         super(receiver);
     }
 
     @Override
     public Response execute(String arg) {
         if (arg == null) {
-            return receiver.show();
+            return receiver.clear();
         } else {
-            throw new WrongInputException("Command Show have no arguments");
+            throw new WrongInputException("Command Clear does not accept arguments");
         }
     }
 }
