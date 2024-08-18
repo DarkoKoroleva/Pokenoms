@@ -4,23 +4,25 @@ import commands.Command;
 import data.*;
 import tools.Response;
 
-import java.util.ArrayDeque;
-import java.util.Date;
-import java.util.Deque;
-import java.util.Map;
+import java.util.*;
 
 public class Receiver {
     private Deque<Flat> collection = new ArrayDeque<>();
     private Date creationDate = new Date();
     private Flat maxElement;
+    private Comparator<Flat> comparator = new Comparator<Flat>() {
+        @Override
+        public int compare(Flat o1, Flat o2) {
+            return o1.compareTo(o2);
+        }
+    };
 
     public Receiver() {}
 
     public Response add(Flat flat) {
         collection.addLast(flat);
-        if (maxElement == null || flat.compareTo(maxElement) > 0) {
-            maxElement = flat;
-        }
+        sort();
+        maxElement = collection.getLast();
         return new Response("The element " + flat + " has been added");
     }
 
@@ -65,14 +67,8 @@ public class Receiver {
             }
         }
 
-        if (maxElement != null && id.equals(maxElement.getId())) {
-            maxElement = collection.peekFirst();
-            for (Flat flat : collection) {
-                if (flat.compareTo(maxElement) > 0) {
-                    maxElement = flat;
-                }
-            }
-        }
+        sort();
+        maxElement = collection.getLast();
 
         return new Response(result);
     }
@@ -86,6 +82,7 @@ public class Receiver {
             }
             break;
         }
+        sort();
         return new Response(result);
     }
 
@@ -103,14 +100,22 @@ public class Receiver {
     }
 
     public Response removeGreater(Flat flat) {
-        Response result = new Response("Collection not contains element greater than" + flat);
+        StringBuilder deletingResult = new StringBuilder();
         for (Flat flatsIter : collection) {
             if (flatsIter.compareTo(flat) > 0) {
+                deletingResult.append(flatsIter.getId()).append(" ");
                 collection.remove(flatsIter);
-                result = new Response("Elements was deleted");
             }
         }
-        return result;
+
+        maxElement=collection.getLast();
+
+        if (!deletingResult.isEmpty()){
+            deletingResult.append("- flats with these id was deleted");
+            return new Response(deletingResult.toString());
+        }
+
+        return new Response("Collection not contains element lower than " + flat);
     }
 
     public Response removeLower(Flat flat) {
@@ -121,6 +126,9 @@ public class Receiver {
                 collection.remove(flatsIter);
             }
         }
+
+        maxElement=collection.getLast();
+
         if (!deletingResult.isEmpty()){
             deletingResult.append("- flats with these id was deleted");
             return new Response(deletingResult.toString());
@@ -151,6 +159,13 @@ public class Receiver {
             result.append("There is no flats");
         }
         return new Response(String.valueOf(result));
+    }
+
+    private void sort(){
+        Flat[] flats = collection.toArray(new Flat[0]);
+        Arrays.sort(flats);
+        collection.clear();
+        Collections.addAll(collection, flats);
     }
 
 }
