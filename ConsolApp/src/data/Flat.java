@@ -1,5 +1,9 @@
+package data;
+
+import tools.Response;
+import tools.WrongInputException;
+
 import java.time.ZonedDateTime;
-import java.util.Random;
 
 public class Flat implements Comparable<Flat> {
     public static final int MIN_AREA = 0;
@@ -15,6 +19,7 @@ public class Flat implements Comparable<Flat> {
     private Boolean furniture; //Поле может быть null
     private View view; //Поле не может быть null
     private House house; //Поле может быть null
+    private IdGenerator idGenerator = new IdGenerator();
 
     public Flat(String name, Coordinates coordinates, int area, Long numberOfRooms, double price, Boolean furniture, View view, House house) {
         setId();
@@ -29,9 +34,31 @@ public class Flat implements Comparable<Flat> {
         setHouse(house);
     }
 
+    public Flat(Long id, String name, Coordinates coordinates, java.time.ZonedDateTime creationDate, int area, Long numberOfRooms, double price, Boolean furniture, View view, House house) {
+        setId(id);
+        setName(name);
+        setCoordinates(coordinates);
+        setCreationDate(creationDate);
+        setArea(area);
+        setNumberOfRooms(numberOfRooms);
+        setPrice(price);
+        setFurniture(furniture);
+        setView(view);
+        setHouse(house);
+    }
+
     public void setId() {
-        Random r = new Random();
-        id = r.nextLong();
+        id = idGenerator.getNewId();
+    }
+
+    public Response setId(Long id) {
+        try {
+            idGenerator.setId(id);
+        } catch (WrongInputException e){
+            return new Response(e.getMessage());
+        }
+        this.id = id;
+        return new Response("the id was installed successfully");
     }
 
     public Long getId() {
@@ -56,6 +83,10 @@ public class Flat implements Comparable<Flat> {
         } else {
             throw new WrongInputException("Coordinates consists of 2 numbers");
         }
+    }
+
+    public void setCreationDate(java.time.ZonedDateTime creationDate){
+        this.creationDate = creationDate;
     }
 
     public Coordinates getCoordinates() {
