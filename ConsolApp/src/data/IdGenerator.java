@@ -5,8 +5,18 @@ import tools.WrongInputException;
 import java.util.HashMap;
 
 public class IdGenerator {
-    private HashMap<Long, Boolean> occupiedId = new HashMap<>();
+    private static IdGenerator instance;
+    private HashMap<Long, Boolean> occupiedId = new HashMap();
     private Long overallId = 0L;
+
+    private IdGenerator(){}
+
+    public static IdGenerator getInstance() {
+        if (instance == null) {
+            instance = new IdGenerator();
+        }
+        return instance;
+    }
 
     public boolean checkId(Long id){
         return (occupiedId.get(id) == null ? false : occupiedId.get(id));
