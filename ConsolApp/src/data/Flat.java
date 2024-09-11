@@ -1,5 +1,6 @@
 package data;
 
+import tools.Printer;
 import tools.Response;
 import tools.WrongInputException;
 
@@ -19,7 +20,8 @@ public class Flat implements Comparable<Flat> {
     private Boolean furniture; //Поле может быть null
     private View view; //Поле не может быть null
     private House house; //Поле может быть null
-    private IdGenerator idGenerator = new IdGenerator();
+    private IdGenerator idGenerator = IdGenerator.getInstance();
+    private Printer printer = Printer.getInstance();
 
     public Flat(String name, Coordinates coordinates, int area, Long numberOfRooms, double price, Boolean furniture, View view, House house) {
         setId();
@@ -51,14 +53,13 @@ public class Flat implements Comparable<Flat> {
         id = idGenerator.getNewId();
     }
 
-    public Response setId(Long id) {
+    public void setId(Long id) {
         try {
             idGenerator.setId(id);
-        } catch (WrongInputException e){
-            return new Response(e.getMessage());
+            this.id = id;
+        } catch (WrongInputException e) {
+            printer.println(e.getMessage());
         }
-        this.id = id;
-        return new Response("the id was installed successfully");
     }
 
     public Long getId() {
