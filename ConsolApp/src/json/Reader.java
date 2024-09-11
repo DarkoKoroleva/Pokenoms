@@ -6,14 +6,12 @@ import tools.WrongInputException;
 
 import java.io.*;
 import java.time.ZonedDateTime;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Objects;
-import java.util.Scanner;
+import java.util.*;
 
 public class Reader {
+    static Printer printer = Printer.getInstance();
 
-    public static Flat readFlatFromJson(File inputFileName) {
+    public static Deque<Flat> readFlatsFromJson(File inputFileName) {
         Long id = null;
         String name = null;
         Coordinates coordinates = null;
@@ -24,6 +22,7 @@ public class Reader {
         Boolean furniture = null;
         View view = null;
         House house = null;
+        Deque<Flat> collection = new ArrayDeque<>();
 
         try (Scanner reader = new Scanner(inputFileName)) {
             String line;
@@ -109,7 +108,7 @@ public class Reader {
                                     break;
                                 }
                             }
-                            if (!valid.get("view")){
+                            if (!valid.get("view")) {
                                 throw new WrongInputException("There is no such view");
                             }
                             break;
@@ -164,13 +163,27 @@ public class Reader {
                         default:
                             break;
                     }
+                } else {
+                    if (!valid.containsValue(false)) {
+                        collection.add(new Flat(id, name, coordinates, creationDate, area, numberOfRooms, price, furniture, view, house));
+                    }
+                    valid.put("id", false);
+                    valid.put("name", false);
+                    valid.put("coordinates", false);
+                    valid.put("creationDate", false);
+                    valid.put("area", false);
+                    valid.put("numberOfRooms", false);
+                    valid.put("price", false);
+                    valid.put("furniture", false);
+                    valid.put("view", false);
+                    valid.put("house", false);
                 }
             }
-            return new Flat(id, name, coordinates, creationDate, area, numberOfRooms, price, furniture, view, house);
-
         } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
+            throw new WrongInputException("you continue to work without being able to save the result");
         }
+
+        return collection;
     }
 
     public static String stringConversion(String line) {
@@ -211,23 +224,22 @@ public class Reader {
     public static String readName() {
         while (true) {
             try {
-                Printer.print("Enter name:");
+                printer.print("Enter name:");
                 String input = scanner.nextLine();
                 if (input.isEmpty()) {
                     throw new WrongInputException("Name couldn't be null");
                 }
                 return input;
             } catch (WrongInputException e) {
-                Printer.println(e.getMessage());
+                printer.println(e.getMessage());
             }
         }
     }
 
     public static Coordinates readCoordinates() {
-        Scanner scanner = new Scanner(System.in);
         while (true) {
             try {
-                Printer.print("Enter coordinates x and y:");
+                printer.print("Enter coordinates x and y:");
                 String input = scanner.nextLine();
                 String[] args = input.split(" ");
                 if (args.length != 2) {
@@ -235,7 +247,7 @@ public class Reader {
                 }
                 return new Coordinates(Double.valueOf(args[0]), Float.valueOf(args[1]));
             } catch (WrongInputException | NumberFormatException e) {
-                Printer.println(e.getMessage());
+                printer.println(e.getMessage());
             }
         }
     }
@@ -243,15 +255,15 @@ public class Reader {
     public static int readArea() {
         while (true) {
             try {
-                Printer.print("Enter area:");
-                int input = Integer.valueOf(scanner.nextLine());
+                printer.print("Enter area:");
+                int input = Integer.parseInt(scanner.nextLine());
                 if (input <= Flat.MAX_AREA && input > Flat.MIN_AREA) {
                     return input;
                 } else {
                     throw new WrongInputException("Area must be in diapason (" + Flat.MIN_AREA + ", " + Flat.MAX_AREA + "]");
                 }
             } catch (WrongInputException | NumberFormatException e) {
-                Printer.println(e.getMessage());
+                printer.println(e.getMessage());
             }
         }
     }
@@ -259,15 +271,15 @@ public class Reader {
     public static Long readNumberOfRooms() {
         while (true) {
             try {
-                Printer.print("Enter number of rooms:");
+                printer.print("Enter number of rooms:");
                 Long numberOfRooms = Long.valueOf(scanner.nextLine());
-                if (numberOfRooms>0){
+                if (numberOfRooms > 0) {
                     return numberOfRooms;
                 } else {
                     throw new WrongInputException("numberOfRooms should be positive");
                 }
             } catch (NumberFormatException | WrongInputException e) {
-                Printer.println(e.getMessage());
+                printer.println(e.getMessage());
             }
         }
     }
@@ -275,15 +287,15 @@ public class Reader {
     public static Double readPrice() {
         while (true) {
             try {
-                Printer.print("Enter price:");
-                Double price = Double.parseDouble(scanner.nextLine());
-                if (price > 0){
+                printer.print("Enter price:");
+                Double price = Double.valueOf(scanner.nextLine());
+                if (price > 0) {
                     return price;
                 } else {
                     throw new WrongInputException("price should be positive");
                 }
             } catch (WrongInputException | NumberFormatException e) {
-                Printer.println(e.getMessage());
+                printer.println(e.getMessage());
             }
         }
     }
@@ -291,7 +303,7 @@ public class Reader {
     public static Boolean readFurniture() {
         while (true) {
             try {
-                Printer.print("Enter furniture:");
+                printer.print("Enter furniture:");
                 String input = scanner.nextLine();
                 if (input.equals("yes") || input.equals("да")) {
                     return (true);
@@ -303,7 +315,7 @@ public class Reader {
                     }
                 }
             } catch (WrongInputException | NumberFormatException e) {
-                Printer.println(e.getMessage());
+                printer.println(e.getMessage());
             }
         }
     }
@@ -311,12 +323,12 @@ public class Reader {
     public static View readView() {
         while (true) {
             try {
-                Printer.print("Enter view:" + Arrays.toString(View.values()));
+                printer.print("Enter view:" + Arrays.toString(View.values()));
                 String input = scanner.nextLine();
                 if (input.isEmpty()) {
                     throw new WrongInputException("Enter a number of view");
                 }
-                int number = Integer.valueOf(input);
+                int number = Integer.parseInt(input);
                 for (View i : View.values()) {
                     if (i.ordinal() == number) {
                         return i;
@@ -324,57 +336,57 @@ public class Reader {
                 }
                 throw new WrongInputException("Enter a number of view from enum");
             } catch (WrongInputException | NumberFormatException e) {
-                Printer.println(e.getMessage());
+                printer.println(e.getMessage());
             }
         }
     }
 
-    public static House readHouse(){
+    public static House readHouse() {
         boolean flag = false;
         String name = "";
         Long year = 0L;
         Long numberOfFlatsOnFloor = 0L;
         while (!flag) {
             try {
-                Printer.print("Enter house - [name]:");
+                printer.print("Enter house - [name]:");
                 String input = scanner.nextLine();
-                if (input.isEmpty()){
+                if (input.isEmpty()) {
                     throw new WrongInputException("Name can not be null");
                 }
                 name = input;
                 flag = true;
             } catch (WrongInputException | NumberFormatException e) {
-                Printer.println(e.getMessage());
+                printer.println(e.getMessage());
             }
         }
 
         flag = false;
         while (!flag) {
             try {
-                Printer.print("Enter house - [year]:");
+                printer.print("Enter house - [year]:");
                 String input = scanner.nextLine();
                 year = Long.valueOf(input);
-                if (year <= 0){
+                if (year <= 0) {
                     throw new WrongInputException("Year must be positive");
                 }
                 flag = true;
             } catch (WrongInputException | NumberFormatException e) {
-                Printer.println(e.getMessage());
+                printer.println(e.getMessage());
             }
         }
 
         flag = false;
         while (!flag) {
             try {
-                Printer.print("Enter house - [Number of flats on floor]:");
+                printer.print("Enter house - [Number of flats on floor]:");
                 String input = scanner.nextLine();
                 numberOfFlatsOnFloor = Long.valueOf(input);
-                if (numberOfFlatsOnFloor <= 0){
+                if (numberOfFlatsOnFloor <= 0) {
                     throw new WrongInputException("Number of flats on floor must be positive");
                 }
                 flag = true;
             } catch (WrongInputException | NumberFormatException e) {
-                Printer.println(e.getMessage());
+                printer.println(e.getMessage());
             }
         }
         return new House(name, year, numberOfFlatsOnFloor);
