@@ -2,12 +2,14 @@ package commands;
 import pattern.*;
 import tools.*;
 
+import java.io.InputStream;
+
 public class RemoveById extends Command {
     public  RemoveById(Receiver receiver){
         super(receiver);
     }
 
-    public Response execute(String arg){
+    public Response execute(String arg, InputStream source){
         try{
             return receiver.removeById(Long.valueOf(arg));
         } catch (WrongInputException | NumberFormatException e){

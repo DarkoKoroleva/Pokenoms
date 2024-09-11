@@ -2,6 +2,8 @@ package commands;
 import pattern.*;
 import tools.*;
 
+import java.io.InputStream;
+
 public class Help extends Command {
     Invoker invoker;
 
@@ -10,7 +12,7 @@ public class Help extends Command {
         this.invoker = invoker;
     }
 
-    public Response execute(String arg){
+    public Response execute(String arg, InputStream source){
         if (arg == null){
             return receiver.help(invoker);
         } else {

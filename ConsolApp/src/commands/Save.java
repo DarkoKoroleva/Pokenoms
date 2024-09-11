@@ -1,30 +1,33 @@
 package commands;
+
+import data.*;
 import pattern.*;
 import tools.*;
 
 import java.io.InputStream;
 
-public class Show extends Command {
-
-    public Show(Receiver receiver) {
+public class Save extends Command{
+    public Save(Receiver receiver) {
         super(receiver);
     }
 
     @Override
     public Response execute(String arg, InputStream source) {
-        if (arg == null) {
-            return receiver.show();
+        if (arg == null){
+            receiver.save();
         } else {
             throw new WrongInputException("Command " + getTitle() + " have no arguments");
         }
+        return null;
     }
 
     public String getTitle(){
-        return "show";
+        return "save";
     }
 
-    public String getDescription(){
-        return "show : see all the items in the collection\n";
+    @Override
+    public String getDescription() {
+        return "save collection to file";
     }
 
 }

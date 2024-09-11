@@ -2,8 +2,10 @@ package pattern;
 
 import commands.Command;
 import data.*;
+import json.JsonWriter;
 import tools.Response;
 
+import java.io.InputStream;
 import java.util.*;
 
 public class Receiver {
@@ -73,11 +75,12 @@ public class Receiver {
         return new Response(result);
     }
 
-    public Response updateById (Long id){
+    public Response updateById (Long id, InputStream source){
+        FlatReader reader = new FlatReader(source);
         String result = "Collection not contains element flat with id = " + id;
         for (Flat flat : collection) {
             if (flat.getId().equals(id)) {
-                 FlatReader.flatUpdate(flat);
+                 reader.flatUpdate(flat);
                  result = "flat " + id + " was updated";
             }
             break;
@@ -166,6 +169,10 @@ public class Receiver {
         Arrays.sort(flats);
         collection.clear();
         Collections.addAll(collection, flats);
+    }
+
+    public Response save(){
+        return JsonWriter.writeCollection(collection);
     }
 
 }

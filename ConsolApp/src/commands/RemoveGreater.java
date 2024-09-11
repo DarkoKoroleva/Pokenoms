@@ -3,15 +3,18 @@ import data.*;
 import pattern.*;
 import tools.*;
 
+import java.io.InputStream;
+
 public class RemoveGreater extends Command {
     public RemoveGreater(Receiver receiver) {
         super(receiver);
     }
 
     @Override
-    public Response execute(String arg) {
+    public Response execute(String arg, InputStream source) {
         if (arg == null) {
-            return receiver.removeGreater(FlatReader.build());
+            FlatReader reader = new FlatReader(source);
+            return receiver.removeGreater(reader.build());
         } else {
             throw new WrongInputException("Command " + getTitle() + " does not accept arguments");
         }

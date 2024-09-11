@@ -3,6 +3,8 @@ import data.*;
 import pattern.*;
 import tools.*;
 
+import java.io.InputStream;
+
 public class CountGreaterThanHouse extends Command {
 
     public CountGreaterThanHouse(Receiver receiver) {
@@ -10,9 +12,10 @@ public class CountGreaterThanHouse extends Command {
     }
 
     @Override
-    public Response execute(String arg) {
+    public Response execute(String arg, InputStream source) {
         if (arg == null) {
-            return receiver.countGreaterThanHouse(FlatReader.readHouse());
+            FlatReader reader = new FlatReader(source);
+            return receiver.countGreaterThanHouse(reader.readHouse());
         } else {
             throw new WrongInputException("Command " + getTitle() + " does not accept arguments");
         }

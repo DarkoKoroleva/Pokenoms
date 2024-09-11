@@ -2,6 +2,8 @@ package commands;
 import pattern.*;
 import tools.*;
 
+import java.io.InputStream;
+
 public class FilterByFurniture extends Command {
 
     public FilterByFurniture(Receiver receiver) {
@@ -9,7 +11,7 @@ public class FilterByFurniture extends Command {
     }
 
     @Override
-    public Response execute(String arg) {
+    public Response execute(String arg, InputStream source) {
         if (arg != null) {
             return receiver.filterByFurniture(Boolean.valueOf(arg));
         } else {

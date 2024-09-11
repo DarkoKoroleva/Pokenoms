@@ -2,15 +2,17 @@ package commands;
 import pattern.*;
 import tools.Response;
 
+import java.io.InputStream;
+
 public class UpdateById extends Command {
     public UpdateById(Receiver receiver) {
         super(receiver);
     }
 
     @Override
-    public Response execute(String arg) {
+    public Response execute(String arg, InputStream source) {
         Long id = Long.valueOf(arg);
-        return receiver.updateById(id);
+        return receiver.updateById(id, source);
     }
 
     public String getTitle(){

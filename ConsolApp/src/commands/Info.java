@@ -2,6 +2,8 @@ package commands;
 import pattern.*;
 import tools.*;
 
+import java.io.InputStream;
+
 public class Info extends Command {
 
     public Info(Receiver receiver){
@@ -9,7 +11,7 @@ public class Info extends Command {
     }
 
     @Override
-    public Response execute(String args) {
+    public Response execute(String args, InputStream source) {
         if (args == null) {
             return receiver.info();
         } else {
