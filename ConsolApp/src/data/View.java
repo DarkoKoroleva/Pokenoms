@@ -1,3 +1,5 @@
+package data;
+
 public enum View {
     YARD("Двор"),
     PARK("Парк"),

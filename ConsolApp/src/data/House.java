@@ -1,3 +1,7 @@
+package data;
+
+import tools.WrongInputException;
+
 public class House implements Comparable<House> {
     private String name; //Поле не может быть null
     private Long year; //Значение поля должно быть больше 0

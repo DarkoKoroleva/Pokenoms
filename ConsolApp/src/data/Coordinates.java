@@ -1,3 +1,7 @@
+package data;
+
+import tools.WrongInputException;
+
 public class Coordinates implements Comparable<Coordinates> {
     public static final int MIN_Y = -114;
     public static final int MAX_X = 640;
@@ -17,12 +21,20 @@ public class Coordinates implements Comparable<Coordinates> {
         }
     }
 
+    public Double getX() {
+        return x;
+    }
+
     public void setY(Float y) {
         if (y > MIN_Y) {
             this.y = y;
         } else {
             throw new WrongInputException("y should be > -114");
         }
+    }
+
+    public Float getY() {
+        return y;
     }
 
     @Override
