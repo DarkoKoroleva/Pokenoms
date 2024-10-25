@@ -17,33 +17,33 @@ public class JsonWriter {
 
         s.append("{\n");
         if (flat == null) {
-            s.append(" \n");
+            s.append("\n");
         } else {
-            s.append("\t\t\"id\": ").append(flat.getId()).append(", \n");
-            s.append("\t\t\"name\": \"").append(flat.getName()).append("\"").append(", \n");
+            s.append("\t\t\"id\": ").append(flat.getId()).append(",\n");
+            s.append("\t\t\"name\": \"").append(flat.getName()).append("\"").append(",\n");
 
             s.append("\t\t\"coordinates\": {\n");
             if (flat.getCoordinates() == null) {
                 s.append(" \n");
             } else {
-                s.append("\t\t\t\"x\": ").append(flat.getCoordinates().getX()).append(", \n");
+                s.append("\t\t\t\"x\": ").append(flat.getCoordinates().getX()).append(",\n");
                 s.append("\t\t\t\"y\": ").append(flat.getCoordinates().getY()).append("\n");
             }
             s.append("\t\t},\n");
 
-            s.append("\t\t\"creationDate\": \"").append(flat.getCreationDate()).append("\", \n");
-            s.append("\t\t\"area\": ").append(flat.getArea()).append(", \n");
-            s.append("\t\t\"numberOfRooms\": ").append(flat.getNumberOfRooms()).append(", \n");
-            s.append("\t\t\"price\": ").append(flat.getPrice()).append(", \n");
-            s.append("\t\t\"furniture\": ").append(flat.getFurniture()).append(", \n");
-            s.append("\t\t\"view\": \"").append(flat.getView()).append("\", \n");
+            s.append("\t\t\"creationDate\": \"").append(flat.getCreationDate()).append("\",\n");
+            s.append("\t\t\"area\": ").append(flat.getArea()).append(",\n");
+            s.append("\t\t\"numberOfRooms\": ").append(flat.getNumberOfRooms()).append(",\n");
+            s.append("\t\t\"price\": ").append(flat.getPrice()).append(",\n");
+            s.append("\t\t\"furniture\": ").append(flat.getFurniture()).append(",\n");
+            s.append("\t\t\"view\": \"").append(flat.getView().ordinal()).append("\",\n");
 
             s.append("\t\t\"house\": {\n");
             if (flat.getHouse() == null) {
                 s.append(" \n");
             } else {
-                s.append("\t\t\t\"name\": \"").append(flat.getHouse().getName()).append("\", \n");
-                s.append("\t\t\t\"year\": ").append(flat.getHouse().getYear()).append(", \n");
+                s.append("\t\t\t\"name\": \"").append(flat.getHouse().getName()).append("\",\n");
+                s.append("\t\t\t\"year\": ").append(flat.getHouse().getYear()).append(",\n");
                 s.append("\t\t\t\"numberOfFlatsOnFloor\": ").append(flat.getHouse().getNumberOfFlatsOnFloor()).append("\n");
             }
             s.append("\t\t}\n");
@@ -52,13 +52,13 @@ public class JsonWriter {
         return s.toString();
     }
 
-    public static Response writeCollection(Collection collection) {
+    public static Response writeCollection(Collection collection, String mainFileForJob) {
         boolean flag = false;
-        try (BufferedWriter writter = new BufferedWriter(new FileWriter("file"))) {
+        try (BufferedWriter writter = new BufferedWriter(new FileWriter(mainFileForJob))) {
             writter.write("[\n");
             for (Object flat : collection) {
                 if (flag) {
-                    writter.write(",\n ");
+                    writter.write(",\n");
                 }
                 Flat newFlat = (Flat) flat;
                 writter.write("\t" + FlatToJson(newFlat));
