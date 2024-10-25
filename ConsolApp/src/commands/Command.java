@@ -11,7 +11,7 @@ public abstract class Command {
         this.receiver=receiver;
     }
 
-    public abstract Response execute(String arg, InputStream source);
+    public abstract Response execute(String arg);
 
     public abstract String getDescription();
 }

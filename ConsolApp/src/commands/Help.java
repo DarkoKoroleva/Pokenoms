@@ -2,8 +2,6 @@ package commands;
 import pattern.*;
 import tools.*;
 
-import java.io.InputStream;
-
 public class Help extends Command {
     Invoker invoker;
 
@@ -12,9 +10,9 @@ public class Help extends Command {
         this.invoker = invoker;
     }
 
-    public Response execute(String arg, InputStream source){
+    public Response execute(String arg){
         if (arg == null){
-            return receiver.help(invoker);
+            return receiver.help(invoker.getCommands());
         } else {
             throw new WrongInputException("Command " + getTitle() + " have no arguments");
         }

@@ -1,5 +1,5 @@
 package commands;
-import data.Flat;
+
 import data.FlatReader;
 import pattern.Receiver;
 import tools.Response;
@@ -13,20 +13,20 @@ public class Add extends Command {
         super(receiver);
     }
 
-    public Response execute(String arg, InputStream source) {
-        if (arg == null){
-            FlatReader reader = new FlatReader(source);
+    public Response execute(String arg) {
+        FlatReader reader = new FlatReader();
+        if (arg == null) {
             return receiver.add(reader.build());
         } else {
             throw new WrongInputException("Command " + getTitle() + " does not accept arguments");
         }
     }
 
-    public String getTitle(){
+    public String getTitle() {
         return "add";
     }
 
-    public String getDescription(){
+    public String getDescription() {
         return "add {element} : add new element to collection\n";
     }
 

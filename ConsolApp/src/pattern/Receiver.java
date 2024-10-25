@@ -3,34 +3,42 @@ package pattern;
 import commands.Command;
 import data.*;
 import json.JsonWriter;
+import tools.Printer;
 import tools.Response;
+import tools.WrongInputException;
 
 import java.io.InputStream;
 import java.util.*;
 
 public class Receiver {
     private Deque<Flat> collection = new ArrayDeque<>();
-    private Date creationDate = new Date();
+    private final Date creationDate = new Date();
     private Flat maxElement;
-    private Comparator<Flat> comparator = new Comparator<Flat>() {
+    private final Comparator<Flat> comparator = new Comparator<Flat>() {
         @Override
         public int compare(Flat o1, Flat o2) {
             return o1.compareTo(o2);
         }
     };
+    private final Printer printer = Printer.getInstance();
 
-    public Receiver() {}
+    public Receiver(){}
+
+    public Receiver(Deque<Flat> collect){
+        collection = sort(collect);
+        maxElement = collection.getLast();
+    }
 
     public Response add(Flat flat) {
         collection.addLast(flat);
-        sort();
+        sort(collection);
         maxElement = collection.getLast();
         return new Response("The element " + flat + " has been added");
     }
 
-    public Response help(Invoker invoker) {
+    public Response help(Map<String, Command> commands) {
         StringBuilder result = new StringBuilder("available operations:\n");
-        for (Map.Entry<String, Command> operation : invoker.getCommands().entrySet()){
+        for (Map.Entry<String, Command> operation : commands.entrySet()) {
             result.append(operation.getValue().getDescription());
         }
         return new Response(result.toString());
@@ -52,7 +60,7 @@ public class Receiver {
             for (Flat flat : collection) {
                 result.append(flat.toString()).append(", ");
             }
-            result.deleteCharAt(result.length()-2);
+            result.deleteCharAt(result.length() - 2);
             result.append("]");
             return new Response(String.valueOf(result));
         }
@@ -69,23 +77,23 @@ public class Receiver {
             }
         }
 
-        sort();
+        sort(collection);
         maxElement = collection.getLast();
 
         return new Response(result);
     }
 
-    public Response updateById (Long id, InputStream source){
-        FlatReader reader = new FlatReader(source);
+    public Response updateById(Long id) {
+        FlatReader reader = new FlatReader();
         String result = "Collection not contains element flat with id = " + id;
         for (Flat flat : collection) {
             if (flat.getId().equals(id)) {
-                 reader.flatUpdate(flat);
-                 result = "flat " + id + " was updated";
+                reader.flatUpdate(flat);
+                result = "flat " + id + " was updated";
             }
             break;
         }
-        sort();
+        sort(collection);
         return new Response(result);
     }
 
@@ -104,16 +112,20 @@ public class Receiver {
 
     public Response removeGreater(Flat flat) {
         StringBuilder deletingResult = new StringBuilder();
-        for (Flat flatsIter : collection) {
-            if (flatsIter.compareTo(flat) > 0) {
-                deletingResult.append(flatsIter.getId()).append(" ");
-                collection.remove(flatsIter);
-            }
+
+        while (collection.getFirst().compareTo(flat) > 0){
+            deletingResult.append(collection.getFirst().getId()).append(" ");
+            collection.removeFirst();
         }
 
-        maxElement=collection.getLast();
+        while (collection.getLast().compareTo(flat) > 0){
+            deletingResult.append(collection.getLast().getId()).append(" ");
+            collection.removeLast();
+        }
 
-        if (!deletingResult.isEmpty()){
+        maxElement = collection.getLast();
+
+        if (!deletingResult.isEmpty()) {
             deletingResult.append("- flats with these id was deleted");
             return new Response(deletingResult.toString());
         }
@@ -123,16 +135,19 @@ public class Receiver {
 
     public Response removeLower(Flat flat) {
         StringBuilder deletingResult = new StringBuilder();
-        for (Flat flatsIter : collection) {
-            if (flatsIter.compareTo(flat) < 0) {
-                deletingResult.append(flatsIter.getId()).append(" ");
-                collection.remove(flatsIter);
-            }
+        while (collection.getFirst().compareTo(flat) < 0){
+            deletingResult.append(collection.getFirst().getId()).append(" ");
+            collection.removeFirst();
         }
 
-        maxElement=collection.getLast();
+        while (collection.getLast().compareTo(flat) < 0){
+            deletingResult.append(collection.getLast().getId()).append(" ");
+            collection.removeLast();
+        }
 
-        if (!deletingResult.isEmpty()){
+        maxElement = collection.getLast();
+
+        if (!deletingResult.isEmpty()) {
             deletingResult.append("- flats with these id was deleted");
             return new Response(deletingResult.toString());
         }
@@ -154,7 +169,7 @@ public class Receiver {
         int counter = 1;
         for (Flat flat : collection) {
             if (flat.getFurniture() == furniture) {
-                result.append(counter + ". " + flat + "\n");
+                result.append(counter).append(". ").append(flat).append("\n");
                 counter++;
             }
         }
@@ -164,15 +179,43 @@ public class Receiver {
         return new Response(String.valueOf(result));
     }
 
-    private void sort(){
+    private Deque<Flat> sort(Deque<Flat> collection) {
         Flat[] flats = collection.toArray(new Flat[0]);
         Arrays.sort(flats);
         collection.clear();
         Collections.addAll(collection, flats);
+        return collection;
     }
 
-    public Response save(){
-        return JsonWriter.writeCollection(collection);
+    public Response save(String file) {
+        return JsonWriter.writeCollection(collection, file);
+    }
+
+    public Response executeScript(Map<String, Command> commands, InputStream source) {
+        try (Scanner input = new Scanner(source)) {
+            while (input.hasNext()){
+                String s = input.nextLine();
+                String[] text = s.split(" ");
+                if (text.length == 1) {
+                    try {
+                        printer.println(commands.get(text[0]).execute(null).getResult());
+                    } catch (NullPointerException e) {
+                        return new Response(e.getMessage());
+                    }
+                } else if (text.length == 2) {
+                    try {
+                        return commands.get(text[0]).execute(text[1]);
+                    } catch (NullPointerException e) {
+                        return new Response(e.getMessage());
+                    }
+                } else {
+                    throw new WrongInputException("Enter command and argument");
+                }
+            }
+            return new Response("script executed");
+        } catch (WrongInputException | NumberFormatException e) {
+            return new Response(e.getMessage());
+        }
     }
 
 }

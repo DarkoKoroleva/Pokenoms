@@ -4,21 +4,21 @@ import data.*;
 import pattern.*;
 import tools.*;
 
-import java.io.InputStream;
-
 public class Save extends Command{
-    public Save(Receiver receiver) {
+    String workFile;
+    public Save(Receiver receiver, String file) {
         super(receiver);
+        workFile = file;
     }
 
     @Override
-    public Response execute(String arg, InputStream source) {
+    public Response execute(String arg) {
         if (arg == null){
-            receiver.save();
+            receiver.save(workFile);
         } else {
             throw new WrongInputException("Command " + getTitle() + " have no arguments");
         }
-        return null;
+        return new Response("collection is saved");
     }
 
     public String getTitle(){
@@ -27,7 +27,7 @@ public class Save extends Command{
 
     @Override
     public String getDescription() {
-        return "save collection to file";
+        return "save : save collection to file";
     }
 
 }

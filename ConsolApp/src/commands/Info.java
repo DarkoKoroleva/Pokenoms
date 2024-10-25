@@ -11,7 +11,7 @@ public class Info extends Command {
     }
 
     @Override
-    public Response execute(String args, InputStream source) {
+    public Response execute(String args) {
         if (args == null) {
             return receiver.info();
         } else {

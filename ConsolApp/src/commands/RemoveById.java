@@ -9,7 +9,7 @@ public class RemoveById extends Command {
         super(receiver);
     }
 
-    public Response execute(String arg, InputStream source){
+    public Response execute(String arg){
         try{
             return receiver.removeById(Long.valueOf(arg));
         } catch (WrongInputException | NumberFormatException e){

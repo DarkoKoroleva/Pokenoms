@@ -11,7 +11,7 @@ public class Clear extends Command {
     }
 
     @Override
-    public Response execute(String arg, InputStream source) {
+    public Response execute(String arg) {
         if (arg == null) {
             return receiver.clear();
         } else {

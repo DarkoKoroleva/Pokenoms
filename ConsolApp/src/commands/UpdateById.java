@@ -10,9 +10,9 @@ public class UpdateById extends Command {
     }
 
     @Override
-    public Response execute(String arg, InputStream source) {
+    public Response execute(String arg) {
         Long id = Long.valueOf(arg);
-        return receiver.updateById(id, source);
+        return receiver.updateById(id);
     }
 
     public String getTitle(){

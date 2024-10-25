@@ -12,9 +12,9 @@ public class CountGreaterThanHouse extends Command {
     }
 
     @Override
-    public Response execute(String arg, InputStream source) {
+    public Response execute(String arg) {
         if (arg == null) {
-            FlatReader reader = new FlatReader(source);
+            FlatReader reader = new FlatReader();
             return receiver.countGreaterThanHouse(reader.readHouse());
         } else {
             throw new WrongInputException("Command " + getTitle() + " does not accept arguments");
