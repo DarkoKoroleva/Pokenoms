@@ -1,25 +1,55 @@
-import java.util.ArrayDeque;
+import data.Flat;
+import json.Reader;
+import pattern.*;
+import tools.*;
+
+import java.io.File;
+import java.util.Arrays;
 import java.util.Deque;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
 
-        Flat flat1 = new Flat("Flat1", new Coordinates(25d, 50f), 1, 3L, 2_949_200, true, View.PARK, new House("Home1", 1988L, 4L));
-        Invoker invoker = new Invoker();
-        invoker.init();
-
         Scanner input = new Scanner(System.in);
+        Printer printer = Printer.getInstance();
+        Invoker invoker;
 
-        while (true){
-            System.out.print("enter command: ");
-            String[] text = input.nextLine().split(" ");
-            if (text.length == 1) {
-                invoker.executeCommand(text[0], null);
+        String mainFileForJob;
+
+        try {
+            if (args != null){
+                StringBuilder mainFile = new StringBuilder(Arrays.toString(args));
+                mainFile.delete(0,1);
+                mainFile.delete(mainFile.lastIndexOf("]"), mainFile.lastIndexOf("]")+1);
+                mainFileForJob = mainFile.toString();
+                Deque<Flat> uploadCollection = Reader.readFlatsFromJson(new File(mainFileForJob));
+                invoker = new Invoker(new Receiver(uploadCollection), args[0]);
             } else {
-                invoker.executeCommand(text[0], text[1]);
+                invoker = new Invoker(new Receiver(), null);
             }
+        } catch (NumberFormatException e) {
+            printer.println(e.getMessage());
+            invoker = new Invoker(new Receiver(), null);
         }
 
+
+        while (true) {
+            try {
+                System.out.print("enter command: ");
+                String[] text = input.nextLine().split(" ");
+                if (text.length == 1) {
+                    Response s = invoker.executeCommand(text[0], null);
+                    printer.println(s.getResult());
+                } else if (text.length == 2) {
+                    printer.println(invoker.executeCommand(text[0], text[1]).getResult());
+                } else {
+                    throw new WrongInputException("Enter command and argument");
+                }
+            } catch (WrongInputException | NumberFormatException e) {
+                printer.println(e.getMessage());
+            }
+        }
     }
+
 }
