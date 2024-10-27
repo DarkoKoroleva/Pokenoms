@@ -28,7 +28,7 @@ public class Main {
             } else {
                 invoker = new Invoker(new Receiver(), null);
             }
-        } catch (NumberFormatException e) {
+        } catch (NumberFormatException | WrongInputException e) {
             printer.println(e.getMessage());
             invoker = new Invoker(new Receiver(), null);
         }
@@ -47,6 +47,8 @@ public class Main {
                     throw new WrongInputException("Enter command and argument");
                 }
             } catch (WrongInputException | NumberFormatException e) {
+                printer.println(e.getMessage());
+            } catch (RuntimeException e) {
                 printer.println(e.getMessage());
             }
         }

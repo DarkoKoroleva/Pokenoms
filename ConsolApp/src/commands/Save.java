@@ -13,10 +13,12 @@ public class Save extends Command{
 
     @Override
     public Response execute(String arg) {
-        if (arg == null){
+        if (arg == null && workFile != null){
             receiver.save(workFile);
-        } else {
+        } else if (arg != null) {
             throw new WrongInputException("Command " + getTitle() + " have no arguments");
+        } else {
+            throw new RuntimeException("You can't save collection. Submit a file for the program to work on startup");
         }
         return new Response("collection is saved");
     }
