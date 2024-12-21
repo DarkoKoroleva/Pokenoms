@@ -13,7 +13,7 @@ public class Main {
 //        lodka.move(12);
 //        System.out.println(lodka.getPosition());
 
-        AirTransport airplane = new AirTransport(
+        Transport airplane = new AirTransport(
                 3,
                 300,
                 1000,
@@ -24,7 +24,7 @@ public class Main {
         airplane.move(2);
         System.out.println(airplane.getPosition());
 
-        EarthTransport car = new EarthTransport("бибика", 4, 100, 5, Color.YELLOW, Position.getDefaultPosition(), 20d);
+        Transport car = new EarthTransport("бибика", 4, 100, 5, Color.YELLOW, Position.getDefaultPosition(), 20d);
         System.out.println(car);
         car.move(1200000);
         System.out.println(car);
